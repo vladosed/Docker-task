@@ -1,19 +1,68 @@
-wordpress:
-    image: wordpress
-    links:
-     - mariadb:mysql
-    environment:
-     - WORDPRESS_DB_PASSWORD=password
-     - WORDPRESS_DB_USER=root
-    ports:
-     - "public_ip:80:80"
-    volumes:
-     - ./html:/var/www/html
-mariadb:
-    image: mariadb
-    environment:
-     - MYSQL_ROOT_PASSWORD=password
-     - MYSQL_DATABASE=wordpress
-    volumes:
-     - ./database:/var/lib/mysql
+version: '3.7'
+volumes:
+    mysql_data: 
+    wordpress_data: 
+
+services:
+    database: 
+        image: mysql:8.0
+        volumes:
+            - mysql_data:/var/lib/mysql
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: password
+            MYSQL_DATABASE: wordpress
+            MYSQL_USER: wpuser
+            MYSQL_PASSWORD: wordpress
+        
+    wordpress0:
+        depends_on:
+            - database
+
+        image: wordpress:latest
+        volumes:
+            - wordpress_data:/var/www/html
+        ports:
+            -8080:80
+        restart: always
+        environment:
+            WORDPRESS_DB_HOST: database:3306
+            WORDPRESS_DB_USER: wpuser
+            WORDPRESS_DB_PASSWORD: password
+    
+    wordpress1:
+        depends_on:
+            - database
+
+        image: wordpress:latest
+        volumes:
+            - wordpress_data:/var/www/html
+        ports:
+            -8080:80
+        restart: always
+        environment:
+            WORDPRESS_DB_HOST: database:3306
+            WORDPRESS_DB_USER: wpuser1
+            WORDPRESS_DB_PASSWORD: password1
+        
+
+
+# wordpress:
+#     image: wordpress
+#     links:
+#      - mariadb:mysql
+#     environment:
+#      - WORDPRESS_DB_PASSWORD=password
+#      - WORDPRESS_DB_USER=root
+#     ports:
+#      - "public_ip:80:80"
+#     volumes:
+#      - ./html:/var/www/html
+# mariadb:
+#     image: mariadb
+#     environment:
+#      - MYSQL_ROOT_PASSWORD=password
+#      - MYSQL_DATABASE=wordpress
+#     volumes:
+#      - ./database:/var/lib/mysql
 
