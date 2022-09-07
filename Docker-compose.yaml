@@ -43,7 +43,7 @@ services:
      - ./database_www0:/var/lib/mysql
     restart: always 
 
- mariadb_tcoil_info:
+ mariadb_www1:
     image: mariadb
     environment:
      - MYSQL_ROOT_PASSWORD=password
