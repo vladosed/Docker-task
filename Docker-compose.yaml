@@ -1,7 +1,6 @@
 version: '3.7'
 
 # this docker file builds 2 wordpress websites:
-# vasulka.cz and tcoil.info
 # each site has its own database
 
 # source paths to files or directories
@@ -21,19 +20,6 @@ services:
      - ./html_www0:/var/www/html
     restart: always
 
- wordpress_www1:
-    image: wordpress
-    container_name: wordpress_www1
-    links:
-     - mariadb_www1:mysql
-    environment:
-     - WORDPRESS_DB_PASSWORD=password
-    ports:
-     - "8081:80"
-    volumes:
-     - ./html_www1:/var/www/html
-    restart: always 
-
  mariadb_www0:
     image: mariadb
     environment:
@@ -42,12 +28,26 @@ services:
     volumes:
      - ./database_www0:/var/lib/mysql
     restart: always 
+    
+#  wordpress_www1:
+#     image: wordpress
+#     container_name: wordpress_www1
+#     links:
+#      - mariadb_www1:mysql
+#     environment:
+#      - WORDPRESS_DB_PASSWORD=password
+#     ports:
+#      - "8081:80"
+#     volumes:
+#      - ./html_www1:/var/www/html
+#     restart: always 
 
- mariadb_www1:
-    image: mariadb
-    environment:
-     - MYSQL_ROOT_PASSWORD=password
-     - MYSQL_DATABASE_1=wordpress_www1
-    volumes:
-     - ./database_www1:/var/lib/mysql
-    restart: always 
+
+#  mariadb_www1:
+#     image: mariadb
+#     environment:
+#      - MYSQL_ROOT_PASSWORD=password
+#      - MYSQL_DATABASE_1=wordpress_www1
+#     volumes:
+#      - ./database_www1:/var/lib/mysql
+#     restart: always 
