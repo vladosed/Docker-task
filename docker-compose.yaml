@@ -7,27 +7,62 @@ version: '3.7'
 # are relative to location of docker.compose.yaml file
 
 services:
-
- wordpress_www0:
-    image: wordpress
-    links:
-     - mariadb_www0:mysql
-    environment:
-     - WORDPRESS_DB_PASSWORD=password
-    ports:
-     - "8081:80"
+  db:
+    # We use a mariadb image which supports both amd64 & arm64 architecture
+    image: mariadb:10.6.4-focal
+    # If you really want to use MySQL, uncomment the following line
+    #image: mysql:8.0.27
+    command: '--default-authentication-plugin=mysql_native_password'
     volumes:
-     - ./html_www0:/var/www/html
+      - db_data:/var/lib/mysql
     restart: always
-
- mariadb_www0:
-    image: mariadb
     environment:
-     - MYSQL_ROOT_PASSWORD=password
-     - MYSQL_DATABASE_0=wordpress_www0
+      - MYSQL_ROOT_PASSWORD=somewordpress
+      - MYSQL_DATABASE=wordpress
+      - MYSQL_USER=wordpress
+      - MYSQL_PASSWORD=wordpress
+    expose:
+      - 3306
+      - 33060
+  wordpress:
+    image: wordpress:latest
     volumes:
-     - ./database_www0:/var/lib/mysql
-    restart: always 
+      - wp_data:/var/www/html
+    ports:
+      - 3000:80
+    restart: always
+    environment:
+      - WORDPRESS_DB_HOST=db
+      - WORDPRESS_DB_USER=wordpress
+      - WORDPRESS_DB_PASSWORD=wordpress
+      - WORDPRESS_DB_NAME=wordpress
+volumes:
+  db_data:
+  wp_data:
+
+
+# services:
+#  mariadb_www0:
+#     image: mariadb
+#     environment:
+#      - MYSQL_ROOT_PASSWORD=password
+#      - MYSQL_DATABASE_0=wordpress_www0
+#     volumes:
+#      - ./database_www0:/var/lib/mysql
+#     restart: always 
+
+#  wordpress_www0:
+#     image: wordpress
+#     links:
+#      - mariadb_www0:mysql
+#     environment:
+#      - WORDPRESS_DB_PASSWORD=password
+#     ports:
+#      - "3000:80"
+#     volumes:
+#      - ./html_www0:/var/www/html
+#     restart: always
+
     
 #  wordpress_www1:
 #     image: wordpress
