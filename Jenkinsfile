@@ -12,8 +12,10 @@ pipeline {
                 '''
             }
         }
-        stage("running congig") {
+        stage("running config") {
             steps {
+                sh 'pwd'
+                sh 'ls -la'
                 sh 'docker-compose up'
             }
         }
