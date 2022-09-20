@@ -15,7 +15,7 @@ services:
     environment:
      - WORDPRESS_DB_PASSWORD=password
     ports:
-     - "8080:80"
+     - "8081:80"
     volumes:
      - ./html_www0:/var/www/html
     restart: always
