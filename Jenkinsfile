@@ -2,7 +2,7 @@ pipeline {
     agent any
     stages{
         stage("verify tooling") {
-            steps{
+            steps {
                 sh '''
                     docker version
                     docker info
@@ -10,6 +10,11 @@ pipeline {
                     curl --version
                     jq --version
                 '''
+            }
+        }
+        stage("running congig") {
+            steps {
+                sh 'docker-compose up'
             }
         }
     }
