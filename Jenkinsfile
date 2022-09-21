@@ -20,7 +20,7 @@ pipeline {
             steps {
                 sh 'pwd'
                 sh 'ls -la'
-                sh 'docker build . -t vladiko'
+                sh 'docker build . -t jenkins_task'
             }
         }
 
