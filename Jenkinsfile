@@ -16,11 +16,18 @@ pipeline {
                 '''
             }
         }
-        stage("build") {
+        stage("Preparation") {
             steps {
                 sh 'pwd'
                 sh 'ls -la'
-                sh 'docker build . -t jenkins_task:${env.BUILD_NUMBER}'
+            }
+        }
+
+        stage("Build") {
+            steps{
+                script {
+                    dockerImage = docker.build "jenkins_task:${env.BUILD_NUMBER}"
+                }
             }
         }
 
