@@ -48,14 +48,14 @@ pipeline {
             steps{
                 sshagent(credentials: ['test_instance']) {
                     sh '''
-                        ssh ubuntu@52.89.43.73
-                        sudo whoami
-                        aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 829092859139.dkr.ecr.us-west-2.amazonaws.com
-                        docker pull 829092859139.dkr.ecr.us-west-2.amazonaws.com/jenkins_task:${env.BUILD_NUMBER}
+                        ssh -o StrictHostKeyChecking=no ubuntu@52.89.43.73 'sudo whoami'
                     '''
                 }
             }
         }
+                        // sudo whoami
+                        // aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 829092859139.dkr.ecr.us-west-2.amazonaws.com
+                        // docker pull 829092859139.dkr.ecr.us-west-2.amazonaws.com/jenkins_task:${env.BUILD_NUMBER}
         // stage("publishing to ECR") {
         //     steps {
         //         withCredentials(aws[credentialsID: 'my_aws', accessKeyVariable:'AWS_ACCESS_KEY_ID', secretKeyVariable:'AWS_SECRET_ACCESS_KEY'])
