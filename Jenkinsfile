@@ -22,7 +22,7 @@ pipeline {
         stage("publishing to ECR") {
             steps {
                 script {
-                    sh 'docker build -t vladiko'
+                    sh 'docker build . -t vladiko'
                     docker.withRegistry(
                         'https://829092859139.dkr.ecr.us-west-2.amazonaws.com/jenkins_task',
                         'ecr:us-west-2:my_aws')
