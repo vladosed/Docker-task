@@ -16,7 +16,6 @@ pipeline {
             steps {
                 sh 'pwd'
                 sh 'ls -la'
-                sh 'docker-compose up -d'
             }
         }
         stage("publishing to ECR") {
