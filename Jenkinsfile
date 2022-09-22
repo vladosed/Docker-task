@@ -49,6 +49,9 @@ pipeline {
                 sshagent(credentials: ['test_instance']) {
                     sh '''
                         ssh -o StrictHostKeyChecking=no ubuntu@52.89.43.73 'sudo whoami'
+                        ssh -o StrictHostKeyChecking=no ubuntu@52.89.43.73 'docker build -t jenkins_task .'
+                        ssh -o StrictHostKeyChecking=no ubuntu@52.89.43.73 'docker tag jenkins_task:${env.BUILD_NUMBER} ${ECR_ID}.dkr.ecr.us-west-2.amazonaws.com/jenkins_task:latest'
+                        ssh -o StrictHostKeyChecking=no ubuntu@52.89.43.73 'docker push ${ECR_ID}.dkr.ecr.us-west-2.amazonaws.com/jenkins_task:${env.BUILD_NUMBER}'
                     '''
                 }
             }
