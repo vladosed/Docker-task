@@ -52,7 +52,7 @@ pipeline {
                     sh "ssh -o StrictHostKeyChecking=no ubuntu@52.89.43.73 'ls -la'"
                     sh "ssh -o StrictHostKeyChecking=no ubuntu@52.89.43.73 'pwd'"
                     sh "ssh -o StrictHostKeyChecking=no ubuntu@52.89.43.73 'docker pull ${ECR_ID}.dkr.ecr.${REGION}.amazonaws.com/jenkins_task:${env.BUILD_NUMBER}'"
-                    sh "ssh -o StrictHostKeyChecking=no ubuntu@52.89.43.73 'docker run -it -d -p 8080:80 ${ECR_ID}.dkr.ecr.${REGION}.amazonaws.com/jenkins_task:${env.BUILD_NUMBER}'"
+                    sh "ssh -o StrictHostKeyChecking=no ubuntu@52.89.43.73 'docker run -it -d -p 3000:80 ${ECR_ID}.dkr.ecr.${REGION}.amazonaws.com/jenkins_task:${env.BUILD_NUMBER}'"
                 }
             }
         }
