@@ -54,6 +54,8 @@ pipeline {
                     sh "ssh -o StrictHostKeyChecking=no ubuntu@52.89.43.73 'docker run -it -d -p 3000:80 ${ECR_ID}.dkr.ecr.${REGION}.amazonaws.com/jenkins_task:${env.BUILD_NUMBER}'"
                 }
             }
-        }                   
+        }  
+    }
+}                 
                     // sh "ssh -o StrictHostKeyChecking=no ubuntu@52.89.43.73 'docker rm -f $(docker ps -a -q)'"
                     // sh "ssh -o StrictHostKeyChecking=no ubuntu@52.89.43.73 'docker rmi $(docker images -q)'"
