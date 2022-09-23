@@ -49,6 +49,7 @@ pipeline {
             steps{
                 sshagent(credentials: ['test_instance']) {
                     sh "ssh -o StrictHostKeyChecking=no ubuntu@52.89.43.73 'sudo whoami'"
+                    sh "ssh -o StrictHostKeyChecking=no ubuntu@52.89.43.73 'docker stop \$(docker ps -a) && docker system prune --all --force'"
                     sh "ssh -o StrictHostKeyChecking=no ubuntu@52.89.43.73 'aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin ${ECR_ID}.dkr.ecr.${REGION}.amazonaws.com'"
                     sh "ssh -o StrictHostKeyChecking=no ubuntu@52.89.43.73 'docker pull ${ECR_ID}.dkr.ecr.${REGION}.amazonaws.com/jenkins_task:${env.BUILD_NUMBER}'"
                     sh "ssh -o StrictHostKeyChecking=no ubuntu@52.89.43.73 'docker run -it -d -p 3000:80 ${ECR_ID}.dkr.ecr.${REGION}.amazonaws.com/jenkins_task:${env.BUILD_NUMBER}'"
