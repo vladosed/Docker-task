@@ -1,9 +1,9 @@
 pipeline {
     agent any
     environment {
-        ECR_ID = '829092859139'
-        REGION    = 'us-west-2'
+        HOST_IP = '52.89.43.73'
     }  
+    
     stages{ 
         stage("verify tooling") {
             steps {
@@ -48,10 +48,13 @@ pipeline {
         stage('Connect to instance & deploy from ecr') {
             steps{
                 sshagent(credentials: ['test_instance']) {
-                    sh "ssh -o StrictHostKeyChecking=no ubuntu@52.89.43.73 'sudo whoami'"
-                    sh "ssh -o StrictHostKeyChecking=no ubuntu@52.89.43.73 'aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin ${ECR_ID}.dkr.ecr.${REGION}.amazonaws.com'"
-                    sh "ssh -o StrictHostKeyChecking=no ubuntu@52.89.43.73 'docker pull ${ECR_ID}.dkr.ecr.${REGION}.amazonaws.com/jenkins_task:${env.BUILD_NUMBER}'"
-                    sh "ssh -o StrictHostKeyChecking=no ubuntu@52.89.43.73 'docker run -it -d -p 3000:80 ${ECR_ID}.dkr.ecr.${REGION}.amazonaws.com/jenkins_task:${env.BUILD_NUMBER}'"
+                    sh "ssh -o StrictHostKeyChecking=no ubuntu@${HOST_IP} 'sudo whoami'"
+                    sh "ssh -o StrictHostKeyChecking=no ubuntu@${HOST_IP} 'docker kill $(docker ps -q)'"
+                    sh "ssh -o StrictHostKeyChecking=no ubuntu@${HOST_IP} 'docker rm $(docker ps -a -q)'"
+                    sh "ssh -o StrictHostKeyChecking=no ubuntu@${HOST_IP} 'docker rmi $(docker images -q)'"
+                    sh "ssh -o StrictHostKeyChecking=no ubuntu@${HOST_IP} 'aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin ${ECR_ID}.dkr.ecr.${REGION}.amazonaws.com'"
+                    sh "ssh -o StrictHostKeyChecking=no ubuntu@${HOST_IP} 'docker pull ${ECR_ID}.dkr.ecr.${REGION}.amazonaws.com/jenkins_task:${env.BUILD_NUMBER}'"
+                    sh "ssh -o StrictHostKeyChecking=no ubuntu@${HOST_IP} 'docker run -it -d -p 3000:80 ${ECR_ID}.dkr.ecr.${REGION}.amazonaws.com/jenkins_task:${env.BUILD_NUMBER}'"
                 }
             }
         }                   
